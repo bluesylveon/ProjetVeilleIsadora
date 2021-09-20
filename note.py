@@ -1,7 +1,7 @@
 from priorite import Priorite
 class Note:
     # TODO: MaAYBE AJOUTER INDEX?
-    def __init__(self, id, titre, contenu, priorite: Priorite):
+    def __init__(self, id=0, titre="", contenu="", priorite: Priorite = Priorite.Faible):
         self.id = id
         self.titre = titre
         self.contenu = contenu

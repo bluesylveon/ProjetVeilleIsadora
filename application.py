@@ -42,6 +42,9 @@ class Application(wx.Frame):
         self.erase.Bind(wx.EVT_BUTTON, self.on_erased_clicked)
         sizer_button.Add(self.erase)
 
+        # TODO: REMOVE
+        self.create_note(None)
+
     def on_erased_clicked(self, event):
         print("Erase")
 
@@ -72,58 +75,62 @@ class Application(wx.Frame):
 class CreateNotePage(wx.Dialog):
     def __init__(self, parent):
         super(CreateNotePage, self).__init__(parent)
+        self.WindowStyle = wx.CAPTION
+        self.Title = "Créer une note"
 
         self.pnl = wx.Panel(self)
-        self.sizer = wx.BoxSizer(wx.VERTICAL)
+        self.sizer = wx.GridSizer(2, gap=wx.Size(0,0))
         self.pnl.SetSizer(self.sizer)
         self.create_widgets()
+        self.note = Note()
 
         self.Show()
 
     def create_widgets(self):
-        sizer_title = wx.BoxSizer(wx.HORIZONTAL)
-        self.sizer.Add(sizer_title)
-
         title_label = wx.StaticText(self.pnl, label="Titre")
-        sizer_title.Add(title_label, 1, wx.EXPAND | wx.ALIGN_LEFT | wx.ALL, 5)
+        self.sizer.Add(title_label, 1, wx.EXPAND | wx.ALIGN_LEFT | wx.ALL, 5)
 
         title_ctrl = wx.TextCtrl(self.pnl, name="title_ctrl")
-        sizer_title.Add(title_ctrl, 1, wx.EXPAND | wx.ALIGN_LEFT | wx.ALL, 5)
-
-        sizer_content = wx.BoxSizer(wx.HORIZONTAL)
-        self.sizer.Add(sizer_content)
+        self.sizer.Add(title_ctrl, 1, wx.EXPAND | wx.ALIGN_LEFT | wx.ALL, 5)
 
         content_label = wx.StaticText(self.pnl, label="Contenu")
-        sizer_content.Add(content_label, 1, wx.EXPAND | wx.ALIGN_LEFT | wx.ALL, 5)
+        self.sizer.Add(content_label, 1, wx.EXPAND | wx.ALIGN_LEFT | wx.ALL, 5)
 
         content_ctrl = wx.TextCtrl(self.pnl, name="content_ctrl", style=wx.TE_MULTILINE)
-        sizer_content.Add(content_ctrl, 1, wx.EXPAND | wx.ALIGN_LEFT | wx.ALL, 5)
+        self.sizer.Add(content_ctrl, 1, wx.EXPAND | wx.ALIGN_LEFT | wx.ALL, 5)
 
-        sizer_button = wx.BoxSizer(wx.HORIZONTAL)
-        self.sizer.Add(sizer_button)
+        priority_label = wx.StaticText(self.pnl, label="Priorité")
+        self.sizer.Add(priority_label, 1, wx.EXPAND | wx.ALIGN_LEFT | wx.ALL, 5)
 
-        self.create_button = wx.Button(self.pnl, label="Créer")
+        priority_combobox = wx.ComboBox(self.pnl,1 , choices=[Priorite.Faible.name, Priorite.Moyenne.name, Priorite.Urgent.name], style=wx.CB_DROPDOWN)
+        priority_combobox.SetValue(Priorite.Faible.name)
+        self.sizer.Add(priority_combobox, 1, wx.EXPAND | wx.ALIGN_LEFT | wx.ALL, 5)
+
+        self.create_button = wx.Button(self.pnl, label="Sauvegarder")
         self.create_button.Bind(wx.EVT_BUTTON, self.on_create_clicked)
-        sizer_button.Add(self.create_button)
+        self.sizer.Add(self.create_button, 1, wx.ALIGN_CENTER | wx.ALL, 5)
 
         self.cancel_button = wx.Button(self.pnl, label="Annuler")
         self.cancel_button.Bind(wx.EVT_BUTTON, self.on_cancel_clicked)
 
-        sizer_button.Add(self.cancel_button)
+        self.sizer.Add(self.cancel_button, 1, wx.ALIGN_CENTER | wx.ALL, 5)
 
     def on_create_clicked(self, event):
-        confirm = wx.MessageBox("Enregistrer cette note et toutes ses modification?", "Confirm", wx.YES_NO, self.pnl)
+        confirm_create_dialog = wx.MessageDialog(self.pnl, "Enregistrer cette note et toutes ses modification?", "Sauvegarde", style= wx.YES_NO )
+        confirm_create_dialog.SetYesNoLabels("&Oui", "&Non")
+        confirm_value = confirm_create_dialog.ShowModal()
 
-        if confirm == wx.YES:
+        if confirm_value == wx.ID_YES:
             # TODO: ADD les trucs pour sauvegarder la note
             self.Close(True)
 
 
     def on_cancel_clicked(self, event):
-        # TODO: CHANGER wx.YES_NO POUR FR
-        confirm = wx.MessageBox("Annuler cette note et toutes ses modification?", "Confirm", wx.YES_NO, self.pnl)
+        confirm_cancel_dialog = wx.MessageDialog(self.pnl, "Jeter cette note et toutes ses modification?", "Annuler", style= wx.YES_NO )
+        confirm_cancel_dialog.SetYesNoLabels("&Oui", "&Non")
+        confirm_value = confirm_cancel_dialog.ShowModal()
 
-        if confirm == wx.YES:
+        if confirm_value == wx.ID_YES:
             self.Close(True)
 
 if __name__ == '__main__':
