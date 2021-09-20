@@ -49,10 +49,6 @@ class Application(wx.Frame):
         self.erase.Bind(wx.EVT_BUTTON, self.on_erased_clicked)
         sizer_button.Add(self.erase)
 
-        self.quit = wx.Button(self.pnl, label="QUIT")
-        self.quit.Bind(wx.EVT_BUTTON, self.on_exit)
-        sizer_button.Add(self.quit)
-
     def on_erased_clicked(self, event):
         print("Erase")
 
