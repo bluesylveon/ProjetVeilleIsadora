@@ -154,6 +154,16 @@ class CreateNotePage(wx.Dialog):
         title_ctrl = wx.TextCtrl(self.pnl, name="title_ctrl")
         sizer_title.Add(title_ctrl, 1, wx.EXPAND | wx.ALIGN_LEFT | wx.ALL, 5)
 
+
+        sizer_content = wx.BoxSizer(wx.HORIZONTAL)
+        self.sizer.Add(sizer_content)
+
+        content_label = wx.StaticText(self.pnl, label="Contenu")
+        sizer_content.Add(content_label, 1, wx.EXPAND | wx.ALIGN_LEFT | wx.ALL, 5)
+
+        content_ctrl = wx.TextCtrl(self.pnl, name="content_ctrl", style=wx.TE_MULTILINE)
+        sizer_content.Add(content_ctrl, 1, wx.EXPAND | wx.ALIGN_LEFT | wx.ALL, 5)
+
         sizer_button = wx.BoxSizer(wx.HORIZONTAL)
         self.sizer.Add(sizer_button)
 
@@ -168,11 +178,23 @@ class CreateNotePage(wx.Dialog):
 
     def on_create_clicked(self, event):
         print("create clicked")
+        confirm = wx.MessageBox("Enregistrer cette note et toutes ses modification?", "Confirm", wx.YES_NO, self.pnl)
+
+        if confirm == wx.YES:
+            # TODO: ADD les trucs pour sauvegarder la note
+            self.Close(True)
+
 
     def on_cancel_clicked(self, event):
-        # TODO: Faire un Pop up pour confirmer l'annulation
+        # TODO: CHANGER wx.YES_NO POUR FR
         print("cancel clicked")
-        self.Close(True)
+        confirm = wx.MessageBox("Annuler cette note et toutes ses modification?", "Confirm", wx.YES_NO, self.pnl)
+
+        if confirm == wx.YES:
+            self.Close(True)
+
+        
+        
 
 # root = tk.Tk()
 # app = Application(master=root)
